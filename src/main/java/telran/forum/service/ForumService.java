@@ -15,9 +15,9 @@ public interface ForumService {
 	
 	Post getPost(String id);
 	
-	Post removePost(String id);
+	Post removePost(String id, String auth);
 	
-	Post updatePost(PostUpdateDto updatepost);
+	Post updatePost(PostUpdateDto updatepost, String auth);
 	
 	boolean addLike(String id);
 	
@@ -28,6 +28,7 @@ public interface ForumService {
 	Iterable<Post> findByAuthor(String author);
 	
 	Iterable<Post> findByDate(DatePeriodDto period);
+
 
 }
  

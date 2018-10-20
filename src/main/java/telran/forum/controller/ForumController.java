@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import telran.forum.domain.Post;
@@ -19,6 +20,7 @@ import telran.forum.dto.PostUpdateDto;
 import telran.forum.service.ForumService;
 
 @RestController
+@RequestMapping("/forum")
 public class ForumController {
 
 	@Autowired
@@ -29,20 +31,20 @@ public class ForumController {
 		return forumService.addNewPost(newPost);
 	}
 
-	@DeleteMapping("/posts/{id}")
-	public Post removePost(@PathVariable String id) {
-		return forumService.removePost(id);
-	}
+//	@DeleteMapping("/posts/{id}")
+//	public Post removePost(@PathVariable String id) {
+//		return forumService.removePost(id);
+//	}
 
 	@GetMapping("/posts/{id}")
 	public Post getPost(@PathVariable String id) {
 		return forumService.getPost(id);
 	}
 
-	@PutMapping("/posts")
-	public Post updatePost(@RequestBody PostUpdateDto updatePost) {
-		return forumService.updatePost(updatePost);
-	}
+//	@PutMapping("/posts")
+//	public Post updatePost(@RequestBody PostUpdateDto updatePost) {
+//		return forumService.updatePost(updatePost);
+//	}
 
 	@PutMapping("/posts/{id}/comments")
 	public Post addNewComment(@PathVariable String id, @RequestBody NewCommentDto newComment) {

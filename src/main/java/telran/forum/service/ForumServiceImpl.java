@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import telran.forum.configuration.AccountUserCredential;
 import telran.forum.dao.ForumRepository;
 import telran.forum.domain.Comment;
 import telran.forum.domain.Post;
@@ -20,6 +21,9 @@ public class ForumServiceImpl implements ForumService {
 
 	@Autowired
 	ForumRepository forumRepository;
+	
+	@Autowired
+	AccountService accountService;
 
 	@Override
 	public Post addNewPost(NewPostDto newPost) {
@@ -38,7 +42,7 @@ public class ForumServiceImpl implements ForumService {
 	}
 
 	@Override
-	public Post removePost(String id) {
+	public Post removePost(String id, String auth) {
 		Post post = forumRepository.findById(id).orElse(null);
 		if (post == null) {
 			return null;
@@ -48,12 +52,17 @@ public class ForumServiceImpl implements ForumService {
 	}
 
 	@Override
-	public Post updatePost(PostUpdateDto updatepost) {
-		Post existing = forumRepository.findById(updatepost.getId()).orElse(null);
+	public Post updatePost(PostUpdateDto updatepost, String auth) {
+		AccountUserCredential credentials = accountService.getExistingUserCreditialsOrThrow(auth);		
+		Post existing = forumRepository
+			.findById(updatepost.getId())
+			.orElse(null);
 		if (existing == null) {
 			return null;
 		}
-
+		if (!existing.getAuthor().equals(credentials.getLogin())) {
+			throw new ForbidenException();
+		}
 		if (updatepost.getContent() != null) {
 			existing.setContent(updatepost.getContent());
 		}
